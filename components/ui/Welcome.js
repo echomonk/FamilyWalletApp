@@ -28,7 +28,7 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
 
 
 export default function Welcome() {
-  const { web3, isProviderLoaded } = useWeb3()
+  const { web3, isLoading } = useWeb3()
   console.log(web3)
   const { eth } = useEthPrice()
  
@@ -89,7 +89,7 @@ export default function Welcome() {
             <h1 className="text-3xl text-center sm:text-5xl text-white text-gradient py-1">
               A family wallet app <br /> with independent transfer functionality.
             </h1>
-            { isProviderLoaded ? "IS INIT" : "IS NOT INIT"}
+            { isLoading ? "Is Loading Web3..." : web3 ? "Web 3 Ready!" : "Please install metamask"}
             <p className="text-center mt-5 text-white font-light md:w-9/12 w-11/12 text-base">
               Explore the crypto world. Buy and sell cryptocurrencies easily.
             </p>
