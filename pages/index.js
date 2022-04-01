@@ -1,13 +1,15 @@
+import { Web3Provider } from "@components/provider";
 import { Dashboard, Footer, Navbar, Services, Transactions, Welcome } from "@components/ui";
 
 
 
-function HomePage() {
+function HomePage({children}) {
   return (
+    <Web3Provider>
     <div className="min-h-screen">
       <div className="gradient-bg-welcome">
         <Navbar />
-        
+        {children}
         <Welcome />
       </div>
         <Services />
@@ -15,6 +17,7 @@ function HomePage() {
         <Transactions />
         <Footer />
     </div>
+    </Web3Provider>
   );
 }
 
