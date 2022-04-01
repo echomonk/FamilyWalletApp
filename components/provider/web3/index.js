@@ -37,6 +37,7 @@ export default function Web3Provider({children}) {
   const _web3Api = useMemo(() => {
     return {
       ...web3Api,
+      isWeb3Loaded: !web3Api.isLoading && web3Api.web3,
       connect: web3Api.provider ?
         async () => {
           try {
@@ -50,7 +51,7 @@ export default function Web3Provider({children}) {
   }, [web3Api])
 
   return (
-    <Web3Context.Provider value={web3Api}>
+    <Web3Context.Provider value={_web3Api}>
       {children}
     </Web3Context.Provider>
   )
