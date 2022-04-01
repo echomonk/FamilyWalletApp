@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { shortenAddress } from "@components/hooks/shortenAddress";
 import { useEthPrice } from "@components/hooks/useEthPrice";
 import { loadContract } from "@utils/loadContract";
+import { useWeb3 } from "@components/provider";
 
 
 const companyCommonStyles = "min-h-[70px] sm:px-0 px-2 sm:min-w-[120px] flex justify-center items-center border-[0.5px] border-gray-400 text-sm font-light text-white";
@@ -26,7 +27,9 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
 )
 
 
-const Welcome = () => {
+export default function Welcome() {
+  const { web3, isProviderLoaded } = useWeb3()
+  console.log(web3)
   const { eth } = useEthPrice()
  
 
@@ -86,11 +89,11 @@ const Welcome = () => {
             <h1 className="text-3xl text-center sm:text-5xl text-white text-gradient py-1">
               A family wallet app <br /> with independent transfer functionality.
             </h1>
+            { isProviderLoaded ? "IS INIT" : "IS NOT INIT"}
             <p className="text-center mt-5 text-white font-light md:w-9/12 w-11/12 text-base">
               Explore the crypto world. Buy and sell cryptocurrencies easily.
             </p>
             </div>
-
               { web3Api.isProviderLoaded ? 
                (!web3Api.provider ?
                 (<button
@@ -139,7 +142,8 @@ const Welcome = () => {
                 <div className={`rounded-br-2xl ${companyCommonStyles}`}>
                   Blockchain
                 </div>
-            </div>
+              </div>
+              
           </div>
 
           <div className="flex flex-1 flex-col items-center justify-start w-full mf:mt-0 mt-10">
@@ -206,5 +210,5 @@ const Welcome = () => {
     );
   }
   
-export default Welcome;
+
 
