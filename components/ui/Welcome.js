@@ -28,8 +28,7 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
 
 
 export default function Welcome() {
-  const { web3, isLoading } = useWeb3()
-  console.log(web3)
+  const { connect, isLoading, web3 } = useWeb3()
   const { eth } = useEthPrice()
  
 
@@ -86,18 +85,24 @@ export default function Welcome() {
         <div className="flex mf:flex-row flex-col items-start justify-between md:p-20 py-12 px-4">
           <div className="flex flex-1 justify-start items-start flex-col mf:mr-10 text-center">
             <div className="flex flex-1 justify-start items-center flex-col">
-            <h1 className="text-3xl text-center sm:text-5xl text-white text-gradient py-1">
-              A family wallet app <br /> with independent transfer functionality.
-            </h1>
-            { isLoading ? "Is Loading Web3..." : web3 ? "Web 3 Ready!" : "Please install metamask"}
-            <p className="text-center mt-5 text-white font-light md:w-9/12 w-11/12 text-base">
-              Explore the crypto world. Buy and sell cryptocurrencies easily.
-            </p>
+              <h1 className="text-3xl text-center sm:text-5xl text-white text-gradient py-1">
+                A family wallet app <br /> with independent transfer functionality.
+              </h1>
+              <p className="text-center mt-5 text-white font-light md:w-9/12 w-11/12 text-base">
+                Explore the crypto world. Buy and sell cryptocurrencies easily.
+              </p>
             </div>
-              { web3Api.isProviderLoaded ? 
-               (!web3Api.provider ?
-                (<button
-                    type="button"
+              { (isLoading && web3) ? 
+               <span
+                    onClick={connect}
+                    className="flex flex-grow w-full justify-center items-center my-5 bg-[#2952e3] p-3 rounded-full cursor-pointer hover:bg-[#2546bd]"
+                    >
+                      <AiFillPlayCircle className="text-white mr-2"/>
+                    <p className="text-white text-base font-semibold">
+                        Connect Wallet
+                    </p>
+              </span> :
+                <span
                     className="flex flex-grow w-full justify-center items-center my-5 bg-orange-400 p-3 rounded-full cursor-pointer hover:bg-orange-500"
                     >
                       <AiFillPlayCircle className="text-white mr-2"/>
@@ -107,24 +112,12 @@ export default function Welcome() {
                         Install Metamask!
                       </a>
                     </p>
-                  </button>
-                ) : (
-                <button
-                    type="button"
-                    onClick={() =>
-                      web3Api.provider.request({method: "eth_requestAccounts"}
-                    )}
-                    className="flex flex-grow w-full justify-center items-center my-5 bg-[#2952e3] p-3 rounded-full cursor-pointer hover:bg-[#2546bd]"
-                    >
-                      <AiFillPlayCircle className="text-white mr-2"/>
-                    <p className="text-white text-base font-semibold">
-                        Connect Wallet
-                    </p>
-                </button>
-                )) :
-                <span className="flex flex-grow w-full justify-center items-center my-5 text-white text-base font-semibold bg-orange-400 p-3 rounded-full cursor-pointer hover:bg-orange-500">
-                  Looking for web3...
-                </span>
+                </span> 
+               
+                // :
+                  // <span className="flex flex-grow w-full justify-center items-center my-5 text-white text-base font-semibold bg-orange-400 p-3 rounded-full cursor-pointer hover:bg-orange-500">
+                  // Looking for web3...
+                  // </span>
               }
 
               <div className="grid sm:grid-cols-3 grid-cols-2 w-full mt-10">
