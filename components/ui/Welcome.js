@@ -1,7 +1,6 @@
 import Web3 from "web3";
 import detectEthereumProvider from '@metamask/detect-provider';
 
-import { AiFillPlayCircle } from "react-icons/ai";
 import { SiEthereum } from "react-icons/si";
 import { BsInfoCircle } from "react-icons/bs";
 import { Loader } from "./";
@@ -10,6 +9,7 @@ import { shortenAddress } from "@components/hooks/shortenAddress";
 import { useEthPrice } from "@components/hooks/useEthPrice";
 import { loadContract } from "@utils/loadContract";
 import { useWeb3 } from "@components/provider";
+import Button from "./button";
 
 
 const companyCommonStyles = "min-h-[70px] sm:px-0 px-2 sm:min-w-[120px] flex justify-center items-center border-[0.5px] border-gray-400 text-sm font-light text-white";
@@ -28,7 +28,7 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
 
 
 export default function Welcome() {
-  const { connect, isLoading, web3 } = useWeb3()
+  const { connect, isLoading, isWeb3Loaded } = useWeb3()
   const { eth } = useEthPrice()
  
 
@@ -92,33 +92,23 @@ export default function Welcome() {
                 Explore the crypto world. Buy and sell cryptocurrencies easily.
               </p>
             </div>
-              { (isLoading && web3) ? 
-               <span
-                    onClick={connect}
-                    className="flex flex-grow w-full justify-center items-center my-5 bg-[#2952e3] p-3 rounded-full cursor-pointer hover:bg-[#2546bd]"
-                    >
-                      <AiFillPlayCircle className="text-white mr-2"/>
-                    <p className="text-white text-base font-semibold">
-                        Connect Wallet
-                    </p>
-              </span> :
-                <span
-                    className="flex flex-grow w-full justify-center items-center my-5 bg-orange-400 p-3 rounded-full cursor-pointer hover:bg-orange-500"
-                    >
-                      <AiFillPlayCircle className="text-white mr-2"/>
-                    <p className="text-white text-base font-semibold">
-                        Wallet is not detected.{` `}
-                      <a target="_blank" rel="noopener noreferrer" href="https://docs.metamask.io">
-                        Install Metamask!
-                      </a>
-                    </p>
-                </span> 
-               
-                // :
-                  // <span className="flex flex-grow w-full justify-center items-center my-5 text-white text-base font-semibold bg-orange-400 p-3 rounded-full cursor-pointer hover:bg-orange-500">
-                  // Looking for web3...
-                  // </span>
+          
+              { isLoading ? 
+                <Button
+                    onClick={connect}>
+                    Loading...
+                </Button> :
+                isWeb3Loaded ?
+                <Button
+                  onClick={connect}>
+                  Connect
+                </Button> :
+                  <Button
+                  onClick={connect}>
+                  Install Metamask...
+                </Button>
               }
+              
 
               <div className="grid sm:grid-cols-3 grid-cols-2 w-full mt-10">
                 <div className={`rounded-tl-2xl ${companyCommonStyles}`}>
