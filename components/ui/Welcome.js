@@ -104,8 +104,8 @@ export default function Welcome() {
                   <div className="flex">
                   <span className="text-white font-semibold text-sm">Account:</span>
                   <p className="text-white font-semibold text-sm">
-                    { account ? 
-                    (shortenAddress(account)) : 
+                    { account.data ? 
+                    (shortenAddress(account.data)) : 
                     "Not connected"}
                   </p>
                   </div>
