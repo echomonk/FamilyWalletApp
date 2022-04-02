@@ -11,6 +11,7 @@ function HomePage({children}) {
         <Navbar />
         {children}
         <Welcome />
+       
       </div>
         <Services />
         <Dashboard />
