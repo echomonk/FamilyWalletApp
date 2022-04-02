@@ -1,16 +1,12 @@
-import Web3 from "web3";
-import detectEthereumProvider from '@metamask/detect-provider';
+import Button from "./button";
 
 import { SiEthereum } from "react-icons/si";
 import { BsInfoCircle } from "react-icons/bs";
 import { Loader } from "./";
-import { useEffect, useState } from "react";
-import { shortenAddress } from "@components/hooks/shortenAddress";
-import { useEthPrice } from "@components/hooks/useEthPrice";
-import { loadContract } from "@utils/loadContract";
+import { shortenAddress } from "@components/provider/web3/hooks/shortenAddress";
+import { useEthPrice } from "@components/provider/web3/hooks/useEthPrice";
 import { useWeb3 } from "@components/provider";
-import Button from "./button";
-
+import { useAccount } from "@components/web3/hooks/useAccount";
 
 const companyCommonStyles = "min-h-[70px] sm:px-0 px-2 sm:min-w-[120px] flex justify-center items-center border-[0.5px] border-gray-400 text-sm font-light text-white";
 
@@ -27,55 +23,13 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
 )
 
 
+
 export default function Welcome() {
   const { connect, isLoading, isWeb3Loaded } = useWeb3()
+  const { account } = useAccount()
+
+
   const { eth } = useEthPrice()
- 
-
-  const [web3Api, setweb3Api] = useState({
-    provider: null,
-    web3: null,
-    isProviderLoaded: false
-  })
-
-  const [account, setAccount] = useState(null)
-
-  const setAccountListener = provider => {
-    provider.on("accountsChanged", accounts => setAccount(accounts[0]))
-  }
-
-
-  useEffect(() => {
-    const loadProvider = async () => {
-      const web3 = new Web3(provider)
-      const provider = await detectEthereumProvider()
-
-      if (provider) {
-        const contract = await loadContract("FamilyWallet", web3)
-
-        setAccountListener(provider)
-        setweb3Api({
-          provider,
-          contract,
-          isProviderLoaded: true
-        });
-      } else {
-        setweb3Api({...web3Api, isProviderLoaded: true})
-        console.error("Please, install Metamask.")
-      }
-    }
-
-    loadProvider()
-  }, [])
-
-  useEffect(() => {
-    const getAccount = async () => {
-      const accounts = await web3Api.web3.eth.getAccounts()
-      setAccount(accounts[0])
-    }
-
-    web3Api.web3 && getAccount();
-  }, [web3Api.web3])
 
   const handleSubmit = () => {
 
@@ -95,8 +49,8 @@ export default function Welcome() {
           
               { isLoading ? 
                 <Button
-                    onClick={connect}>
-                    Loading...
+                  onClick={connect}>
+                  Loading...
                 </Button> :
                 isWeb3Loaded ?
                 <Button
@@ -104,12 +58,11 @@ export default function Welcome() {
                   Connect
                 </Button> :
                   <Button
-                  onClick={connect}>
-                  Install Metamask...
+                  onClick={() => window.open("https://metamask.io/download.html", "_blank")}>
+                  Install Metamask
                 </Button>
               }
               
-
               <div className="grid sm:grid-cols-3 grid-cols-2 w-full mt-10">
                 <div className={`rounded-tl-2xl ${companyCommonStyles}`}>
                   Reliability
@@ -174,7 +127,7 @@ export default function Welcome() {
 
               <div className="h-[1px] w-full bg-gray-400 my-2" />
 
-              {false ? (
+              { false ? (
                 <Loader />
               ) : (
                 <button
