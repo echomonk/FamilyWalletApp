@@ -18,5 +18,5 @@ export const handler = (web3, provider) => () => {
     )
   }, [provider])
 
-  return { account: {mutate, ...rest}}
+  return { account: {mutate, ...rest }}
 }
