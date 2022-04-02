@@ -3,7 +3,7 @@ import { AiFillPlayCircle } from "react-icons/ai";
 
 export default function Button({ 
     children,
-    className = "bg-blue-500 hover:bg-blue-600 text-white text-base font-semibold",
+    className = "bg-blue-600 hover:bg-blue-700 text-white text-base font-semibold",
     ...rest
 }) {
  
