@@ -1,7 +1,9 @@
 const { createContext, useContext, useEffect, useState, useMemo } = require("react");
 
 import detectEthereumProvider from "@metamask/detect-provider";
+import { loadContract } from "@utils/loadContract";
 import Web3 from "web3";
+import { setupHooks } from "./hooks/useSetupHooks";
 
 const Web3Context = createContext(null)
 
@@ -10,23 +12,30 @@ export default function Web3Provider({children}) {
     provider: null,
     web3: null,
     contract: null,
-    isLoading: true
+    isLoading: false
   })
+
+  const setAccountListener = provider => {
+    provider.on("accountsChanged", accounts => setAccount(accounts[0]))
+  }
 
   useEffect(() => {
     const loadProvider = async () => {
-
       const provider = await detectEthereumProvider()
+
       if (provider) {
         const web3 = new Web3(provider)
+        const contract = await loadContract("FamilyWallet", web3)
+        console.log(contract)
+        setAccountListener(provider)
         setWeb3Api({
           provider,
           web3,
           contract: null,
-          isLoading: false
+          isLoading: true
         })
       } else {
-        setWeb3Api(api => ({...api, isLoading: false}))
+        setWeb3Api(api => ({...api, isLoading: true}))
         console.error("Please, install Metamask.")
       }
     }
@@ -35,13 +44,15 @@ export default function Web3Provider({children}) {
   }, [])
 
   const _web3Api = useMemo(() => {
+    const { web3, provider } = web3Api
     return {
       ...web3Api,
-      isWeb3Loaded: !web3Api.isLoading && web3Api.web3,
-      connect: web3Api.provider ?
+      isWeb3Loaded: web3 != null,
+      getHooks: () => setupHooks(web3),
+      connect: provider ?
         async () => {
           try {
-            await web3Api.provider.request({method: "eth_requestAccounts"})
+            await provider.request({method: "eth_requestAccounts"})
           } catch {
             location.reload()
           }
@@ -59,4 +70,9 @@ export default function Web3Provider({children}) {
 
 export function useWeb3() {
   return useContext(Web3Context)
+}
+
+export function useHooks(cb) {
+  const { getHooks } = useWeb3()
+  return cb(getHooks())
 }
