@@ -12,12 +12,8 @@ export default function Web3Provider({children}) {
     provider: null,
     web3: null,
     contract: null,
-    isLoading: false
+    isLoading: true
   })
-
-  // const setAccountListener = provider => {
-  //   provider.on("accountsChanged", accounts => setAccount(accounts[0]))
-  // }
 
   useEffect(() => {
     const loadProvider = async () => {
@@ -27,15 +23,14 @@ export default function Web3Provider({children}) {
         const web3 = new Web3(provider)
         const contract = await loadContract("FamilyWallet", web3)
         console.log(contract)
-        // setAccountListener(provider)
         setWeb3Api({
           provider,
           web3,
           contract: null,
-          isLoading: true
+          isLoading: false
         })
       } else {
-        setWeb3Api(api => ({...api, isLoading: true}))
+        setWeb3Api(api => ({...api, isLoading: false}))
         console.error("Please, install Metamask.")
       }
     }
@@ -48,7 +43,7 @@ export default function Web3Provider({children}) {
     return {
       ...web3Api,
       isWeb3Loaded: web3 != null,
-      getHooks: () => setupHooks(web3),
+      getHooks: () => setupHooks(web3, provider),
       connect: provider ?
         async () => {
           try {
