@@ -1,9 +1,7 @@
-const Dashboard = () => {
+const Dashboard = ({network}) => {
     return (
-      <div className="flex items-start justify-center">
-         <div className="p-3 flex justify-end items-start flex-col rounded-xl h-40 sm:w-72 w-full my-5 dashboardCard .blue-glassmorphism">
-
-        </div>
+      <div className="flex flex-grow w-full justify-center items-center my-5 p-3 rounded-full blue-glassmorphism">
+        {network} 
       </div>
       
     );
