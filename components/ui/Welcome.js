@@ -7,6 +7,8 @@ import { shortenAddress } from "@components/provider/web3/hooks/shortenAddress";
 import { useEthPrice } from "@components/provider/web3/hooks/useEthPrice";
 import { useWeb3 } from "@components/provider";
 import { useAccount } from "@components/web3/hooks/useAccount";
+import { useNetwork } from "@components/web3/hooks/useNetwork";
+import Dashboard from "./Dashboard";
 
 const companyCommonStyles = "min-h-[70px] sm:px-0 px-2 sm:min-w-[120px] flex justify-center items-center border-[0.5px] border-gray-400 text-sm font-light text-white";
 
@@ -27,6 +29,7 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
 export default function Welcome() {
   const { connect, isLoading, isWeb3Loaded } = useWeb3()
   const { account } = useAccount()
+  const { network } = useNetwork()
 
 
   const { eth } = useEthPrice()
@@ -46,7 +49,7 @@ export default function Welcome() {
                 Explore the crypto world. Buy and sell cryptocurrencies easily.
               </p>
             </div>
-          
+              
               { isLoading ? 
                 <Button
                   onClick={connect}>
@@ -62,7 +65,18 @@ export default function Welcome() {
                   Install Metamask
                 </Button>
               }
-              
+
+               { account.isAdmin ?
+                <span
+                  className="flex flex-grow w-full justify-center items-center my-5 p-3 rounded-full cursor-pointer bg-orange-500 hover:bg-orange-600 text-white text-base font-semibold">
+                  Admin
+                </span> :
+                <>
+                </>
+                } 
+               <Dashboard network={network.data} />
+
+             
               <div className="grid sm:grid-cols-3 grid-cols-2 w-full mt-10">
                 <div className={`rounded-tl-2xl ${companyCommonStyles}`}>
                   Reliability
@@ -104,9 +118,11 @@ export default function Welcome() {
                   <div className="flex">
                   <span className="text-white font-semibold text-sm">Account:</span>
                   <p className="text-white font-semibold text-sm">
-                    { account.data ? 
+
+                    {account.data ? 
                     (shortenAddress(account.data)) : 
                     "Not connected"}
+
                   </p>
                   </div>
                   <p className="text-white font-semibold text-lg mt-1">
