@@ -15,9 +15,9 @@ export default function Web3Provider({children}) {
     isLoading: false
   })
 
-  const setAccountListener = provider => {
-    provider.on("accountsChanged", accounts => setAccount(accounts[0]))
-  }
+  // const setAccountListener = provider => {
+  //   provider.on("accountsChanged", accounts => setAccount(accounts[0]))
+  // }
 
   useEffect(() => {
     const loadProvider = async () => {
@@ -27,7 +27,7 @@ export default function Web3Provider({children}) {
         const web3 = new Web3(provider)
         const contract = await loadContract("FamilyWallet", web3)
         console.log(contract)
-        setAccountListener(provider)
+        // setAccountListener(provider)
         setWeb3Api({
           provider,
           web3,
