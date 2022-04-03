@@ -6,9 +6,8 @@ import { Loader } from "./";
 import { shortenAddress } from "@components/provider/web3/hooks/shortenAddress";
 import { useEthPrice } from "@components/provider/web3/hooks/useEthPrice";
 import { useWeb3 } from "@components/provider";
-import { useAccount } from "@components/web3/hooks/useAccount";
-import { useNetwork } from "@components/web3/hooks/useNetwork";
 import Dashboard from "./Dashboard";
+import { useAccount, useNetwork } from "@components/web3/hooks";
 
 const companyCommonStyles = "min-h-[70px] sm:px-0 px-2 sm:min-w-[120px] flex justify-center items-center border-[0.5px] border-gray-400 text-sm font-light text-white";
 
@@ -45,6 +44,11 @@ export default function Welcome() {
               <h1 className="text-3xl text-center sm:text-5xl text-white text-gradient py-1">
                 A family wallet app <br /> with independent transfer functionality.
               </h1>
+              {/* <>
+              "Current" {`${network.data}`}
+              "Target" {`${network.target}`}
+              "Is Supported" {`${network.isSupported}`}
+              </> */}
               <p className="text-center mt-5 text-white font-light md:w-9/12 w-11/12 text-base">
                 Explore the crypto world. Buy and sell cryptocurrencies easily.
               </p>
@@ -65,15 +69,7 @@ export default function Welcome() {
                   Install Metamask
                 </Button>
               }
-
-               { account.isAdmin ?
-                <span
-                  className="flex flex-grow w-full justify-center items-center my-5 p-3 rounded-full cursor-pointer bg-orange-500 hover:bg-orange-600 text-white text-base font-semibold">
-                  Admin
-                </span> :
-                <>
-                </>
-                } 
+  
                <Dashboard network={network.data} />
 
              
