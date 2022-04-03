@@ -23,14 +23,10 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
   />
 )
 
-
-
 export default function Welcome() {
   const { connect, isLoading, isWeb3Loaded } = useWeb3()
   const { account } = useAccount()
   const { network } = useNetwork()
-
-
   const { eth } = useEthPrice()
 
   const handleSubmit = () => {
@@ -54,21 +50,24 @@ export default function Welcome() {
               </p>
             </div>
               
-              { isLoading ? 
-                <Button
-                  onClick={connect}>
-                  Loading...
-                </Button> :
-                isWeb3Loaded ?
-                <Button
-                  onClick={connect}>
-                  Connect
-                </Button> :
+            { !account.data ? 
+              (isLoading ? 
                   <Button
-                  onClick={() => window.open("https://metamask.io/download.html", "_blank")}>
-                  Install Metamask
-                </Button>
-              }
+                    onClick={connect}>
+                    Loading...
+                  </Button> :
+                isWeb3Loaded ?
+                  <Button
+                    onClick={connect}>
+                    Connect
+                  </Button> :
+                    <Button
+                    onClick={() => window.open("https://metamask.io/download.html", "_blank")}>
+                    Install Metamask
+                  </Button>
+                ) :
+                <></>
+             }
   
                <Dashboard network={network.data} />
 
