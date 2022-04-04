@@ -2,7 +2,7 @@ import { useWeb3 } from "@components/provider";
 import { Loader } from "@components/ui"
 import { useAccount } from "@components/web3/hooks";
 import { useState } from "react";
-import Web3 from "web3";
+
 
 
 const Input = ({ placeholder, name, type, value, handleChange }) => (
