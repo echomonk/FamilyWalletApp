@@ -1,9 +1,11 @@
+
 import { Web3Provider } from "@components/provider";
 import { Dashboard, Footer, Navbar, Services, Transactions, Welcome } from "@components/ui";
 
 
 
 function HomePage({children}) {
+
   return (
     <Web3Provider>
     <div className="min-h-screen">
@@ -14,7 +16,6 @@ function HomePage({children}) {
        
       </div>
         <Services />
-        <Dashboard />
         <Transactions />
         <Footer />
     </div>
