@@ -8,6 +8,7 @@ import { setupHooks } from "./hooks/useSetupHooks";
 const Web3Context = createContext(null)
 
 export default function Web3Provider({children}) {
+ 
   const [web3Api, setWeb3Api] = useState({
     provider: null,
     web3: null,
@@ -19,15 +20,16 @@ export default function Web3Provider({children}) {
   useEffect(() => {
     const loadProvider = async () => {
       const provider = await detectEthereumProvider()
+      const providerUrl = process.env.PROVIDER_URL || "https:localhost:7545"
 
       if (provider) {
-        const web3 = new Web3(provider)
+        const web3 = new Web3(provider, providerUrl)
         const contract = await loadContract("FamilyWallet", web3)
-        console.log(contract)
         setWeb3Api({
           provider,
+          providerUrl,
           web3,
-          contract: null,
+          contract,
           isLoading: false,
           hooks: setupHooks(web3, provider)
         })
@@ -56,6 +58,7 @@ export default function Web3Provider({children}) {
         () => console.error("Cannot connect to Metamask, try to reload your browser please.")
     }
   }, [web3Api])
+
 
   return (
     <Web3Context.Provider value={_web3Api}>
