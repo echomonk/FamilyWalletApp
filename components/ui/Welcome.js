@@ -19,6 +19,7 @@ export default function Welcome() {
   const { account } = useAccount()
   const { network } = useNetwork()
   const { eth } = useEthPrice()
+ 
   
      return (
       <div className="flex w-full justify-center items-start">
