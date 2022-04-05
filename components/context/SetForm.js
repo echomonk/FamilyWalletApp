@@ -23,6 +23,10 @@ export default function SetForm() {
   const { connect, isLoading, isWeb3Loaded, contract, provider, providerUrl, web3} = useWeb3()
   const { account } = useAccount()
 
+  const toBN = value => web3.utils.toBN(value)
+  const toWei = value => web3.utils.toWei(String(value))
+
+
   const [formData, setformData] = useState({ addressTo: "", amount: "", keyword: "", message: "" })
 
   const handleChange = (e, name) => {
@@ -46,22 +50,22 @@ export default function SetForm() {
       console.log(contract)
     if (web3) {
       const { addressTo, amount, keyword, message } = formData;
-      const parsedAmount = web3.utils.toWei(amount, "ether");
+      const parsedAmount = web3.utils.toHex(toBN(toWei(amount.toString(), 'ether')))
       console.log(parsedAmount)
       try {
           await ethereum.enable();
-          web3.eth.sendTransaction({
+          await web3.eth.sendTransaction({
             from: account,
             to: addressTo,
-            gas: "0x42C1D80",
-            value: parsedAmount._hex,
+            gas: "0x5208",
+            value: parsedAmount
           });
       } catch (error) {
         console.log(error)
         throw new Error("No ethereum object");
       }
-  }
-  }
+    }
+}
       
       
 
