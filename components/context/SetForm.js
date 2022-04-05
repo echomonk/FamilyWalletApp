@@ -18,9 +18,9 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
   )
 
 export default function SetForm() {
-
-  const { connect, isLoading, isWeb3Loaded, contract, provider, providerUrl, web3} = useWeb3()
+  const { isLoading, contract, provider, providerUrl, web3} = useWeb3()
   const { account } = useAccount()
+  const [txLoading, settxLoading] = useState(false)
 
   const toBN = value => web3.utils.toBN(value)
   const toWei = value => web3.utils.toWei(String(value))
@@ -41,21 +41,31 @@ export default function SetForm() {
 
     sendTx(web3);
   }
-  
-  const sendTx = async (web3) => {
-    if (web3) {
-      const { addressTo, amount, keyword, message } = formData;
-      const parsedAmount = web3.utils.toWei(amount, "ether");
-      let data = {from: account.data,to: addressTo,gas: "0x5208",value: parsedAmount};
-      data = JSON.parse(JSON.stringify(data));
-      try {
-          await web3.eth.sendTransaction(data);
-      } catch (error) {
-        console.log(error)
-        throw new Error("No ethereum object");
-      }
+
+const sendTx = async (web3) => {
+
+  if (web3) {
+    const { addressTo, amount, keyword, message } = formData
+    const parsedAmount = web3.utils.toWei(amount, "ether")
+    const data = {from: account.data, to: addressTo, gas: "0x5208", value: parsedAmount};
+    data = JSON.parse(JSON.stringify(data))
+    try {
+      const res= await web3.eth.sendTransaction(data)
+      console.log(res)
+      const result = await contract.methods.addToBlockchain(
+        addressTo,
+        parsedAmount,
+        keyword,
+        message
+      ).send ({from: account.data})
+      console.log(result)
+    } catch (error) {
+      console.log(error)
+      throw new Error("No ethereum object")
     }
   }
+}
+
   return (
       
     <div className="p-5 sm:w-96 w-full flex flex-col justify-start items-center blue-glassmorphism">
