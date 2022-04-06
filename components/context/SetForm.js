@@ -1,7 +1,7 @@
-import { useWeb3 } from "@components/provider";
+import { useWeb3 } from "@components/provider"
 import { Loader } from "@components/ui"
-import { useAccount } from "@components/web3/hooks";
-import { useState } from "react";
+import { useAccount } from "@components/web3/hooks"
+import { useState } from "react"
 
 
 
@@ -18,15 +18,11 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
   )
 
 export default function SetForm() {
-  const { isLoading, contract, provider, providerUrl, web3} = useWeb3()
+  const { isLoading, contract, provider, providerUrl, web3 } = useWeb3()
   const { account } = useAccount()
-  const [txLoading, settxLoading] = useState(false)
-
-  const toBN = value => web3.utils.toBN(value)
-  const toWei = value => web3.utils.toWei(String(value))
-
-
   const [formData, setformData] = useState({ addressTo: "", amount: "", keyword: "", message: "" })
+  // const toBN = value => web3.utils.toBN(value)
+  // const toWei = value => web3.utils.toWei(String(value))
 
   const handleChange = (e, name) => {
     setformData((prevState) => ({ ...prevState, [name]: e.target.value }))
@@ -39,26 +35,30 @@ export default function SetForm() {
 
     if(!addressTo || !amount || !keyword || !message ) return
 
-    sendTx(web3);
+    sendTx(web3)
   }
 
-const sendTx = async (web3) => {
+  
 
+const sendTx = async (web3) => {
   if (web3) {
     const { addressTo, amount, keyword, message } = formData
     const parsedAmount = web3.utils.toWei(amount, "ether")
-    const data = {from: account.data, to: addressTo, gas: "0x5208", value: parsedAmount};
+    const data = {from: account.data, to: addressTo, gas: "0x5208", value: parsedAmount}
     data = JSON.parse(JSON.stringify(data))
     try {
-      const res= await web3.eth.sendTransaction(data)
-      console.log(res)
-      const result = await contract.methods.addToBlockchain(
+      const resultTx = await web3.eth.sendTransaction((data), function(err, transactionHash) {
+        if (!err)
+          console.log(transactionHash);
+        const receipt = web3.eth.getTransactionReceipt(transactionHash);
+      });
+      const resultAdd = await contract.methods.addToBlockchain(
         addressTo,
         parsedAmount,
         keyword,
         message
-      ).send ({from: account.data})
-      console.log(result)
+        ).send({from: account.data})
+        console.log(resultAdd)
     } catch (error) {
       console.log(error)
       throw new Error("No ethereum object")
