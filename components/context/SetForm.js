@@ -1,7 +1,7 @@
 import { useWeb3 } from "@components/provider"
 import { Loader } from "@components/ui"
 import { useAccount } from "@components/web3/hooks"
-import { useState, useEffect} from "react"
+import { useState} from "react"
 
 const Input = ({ placeholder, name, type, value, handleChange }) => (
     <input 
