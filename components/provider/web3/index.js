@@ -31,7 +31,7 @@ export default function Web3Provider({children}) {
           web3,
           contract,
           isLoading: false,
-          hooks: setupHooks(web3, provider)
+          hooks: setupHooks(web3, provider, contract)
         })
       } else {
         setWeb3Api(api => ({...api, isLoading: false}))
@@ -67,11 +67,11 @@ export default function Web3Provider({children}) {
   )
 }
 
-export function useWeb3() {
+export function UseWeb3() {
   return useContext(Web3Context)
 }
 
 export function useHooks(cb) {
-  const { hooks } = useWeb3()
+  const { hooks } = UseWeb3()
   return cb(hooks)
 }
