@@ -6,13 +6,18 @@ import TabContent from "@material-tailwind/react/TabContent";
 import TabPane from "@material-tailwind/react/TabPane";
 import { useState } from "react";
 import { addAllowance } from "@components/common/walletpanel";
+import { UseAccount } from "@components/web3/hooks";
 
 
 export default function Tabs () {
     const [openTab, setOpenTab] = useState(1);
+    const { account } = UseAccount()
     return (
-        <Tab classname="bg-transparent">
-            <TabList color="white-.glassmorphism">
+        <div className="p-5 sm:w-96 w-full flex flex-col justify-start items-center bg-transparent" >
+           <Tab className="p-5 sm:w-96 w-full flex flex-col justify-start items-center bg-transparent">
+            <TabList color="">
+
+
                 <TabItem
                     onClick={(e) => {
                         e.preventDefault();
@@ -24,7 +29,7 @@ export default function Tabs () {
                 >
                     Withdraw
                 </TabItem>
-                <TabItem
+                <TabItem 
                     onClick={(e) => {
                         e.preventDefault();
                         setOpenTab(2);
@@ -46,20 +51,26 @@ export default function Tabs () {
                 >
                     Reduce Allowance
                 </TabItem>
+                
+
+
             </TabList>
-                <TabContent color ="white-.glassmorphism" classname="bg-transparent">
-                    <TabPane active={openTab === 1 ? true : false}>
+                <TabContent>
+                    <TabPane
+                    ripple="light"
+                    active={openTab === 1 ? true : false}
+                    >
                         {addAllowance()}
                     </TabPane>
-                    <TabPane active={openTab === 2 ? true : false}>
+                    <TabPane 
+                    active={openTab === 2 ? true : false}>
                         {addAllowance()}
                     </TabPane>
                     <TabPane active={openTab === 3 ? true : false}>
-                        <p>
                         {addAllowance()}
-                        </p>
                     </TabPane>
                 </TabContent>
             </Tab>
+        </div>
     );
 }
