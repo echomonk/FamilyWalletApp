@@ -1,6 +1,5 @@
 import { UseTxContext } from "@components/context/TransactionContext"
 import { UseWeb3 } from "@components/provider"
-import { UseAccount } from "@components/web3/hooks"
 import Loader from "../../ui/Loader"
 
 const Input = ({ placeholder, name, type, value, handleChange }) => (
@@ -17,9 +16,9 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
 
 
 const addAllowance  = () => { 
-  const { connect, isLoading, isWeb3Loaded, web3 } = UseWeb3()
+  const { web3 } = UseWeb3()
   const { handleChange, formData, addAllowance } = UseTxContext()
-  const { account } = UseAccount()
+
 
   const handleSubmit = (e) => {
     const { addressTo, amount } = formData
