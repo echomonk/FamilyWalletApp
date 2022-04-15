@@ -15,17 +15,25 @@ export const useNetwork = () => {
     }
 }
 
-export const useAccount = () => {
-  const swrRes = enhanceHook(useHooks(hooks => hooks.useAccount)())
+export const UseAccount = () => {
+  const swrRes = enhanceHook(useHooks(hooks => hooks.UseAccount)())
     return {
         account: swrRes
     }
 }
 
-export const useForm = () => {
-  const swrRes = enhanceHook(useHooks(hooks => hooks.useForm)())
+// export const useForm = () => {
+//   const swrRes = enhanceHook(useHooks(hooks => hooks.useForm)())
 
-  return {
-    formData: swrRes
-  }
-}
+//   return {
+//     formData: swrRes
+//   }
+// }
+
+// export const useTransaction = () => {
+//   const swrRes = enhanceHook(useHooks(hooks => hooks.useTransaction)())
+
+//   return {
+//     transaction: swrRes
+//   }
+// }
