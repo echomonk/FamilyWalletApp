@@ -11,7 +11,8 @@ export default function TransactionProvider({ children }) {
   const { account } = UseAccount()
   const [transactions, setTransactions] = useState([])
   const [formData, setformData] = useState({ addressTo: "", amount: "", keyword: "", message: "" })
-  const [t_count, setT_count] = useState(0)
+  const [tcount, setTcount] = useState("")
+  console.log(tcount)
 
 
 
@@ -85,12 +86,8 @@ export default function TransactionProvider({ children }) {
             keyword,
             message
             ).send({from: account.data})
-            try {
-              let t_count = window.sessionStorage.getItem("t_count");
-              window.sessionStorage.setItem("t_count", t_count+1);
-              }catch (error){
-              window.sessionStorage.setItem("t_count", 1);
-              }
+            await contract.methods.getTransactionCount().call()
+            this.setTcount({ t_count: this.state.t_count + 1 })
             // window.location.reload()
           } catch (err) {
             console.log(err)
@@ -122,7 +119,7 @@ export default function TransactionProvider({ children }) {
   };
   useEffect(() => {
       getAllTransactions(web3)
-  }, [account.data])
+  }, [account.data, tcount])
 
   return (
       
