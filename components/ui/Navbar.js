@@ -3,7 +3,6 @@ import { AiOutlineClose } from "react-icons/ai";
 import { useState } from "react";
 
 import Image from "next/image";
-
 import logo from "@images/logo.png";
 
 
