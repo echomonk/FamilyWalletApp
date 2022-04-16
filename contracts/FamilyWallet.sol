@@ -1,6 +1,6 @@
 //SPDX-License-Identifier: MIT
 
-pragma solidity >=0.7.0 <0.9.0;
+pragma solidity >= 0.7.0 < 0.9.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
@@ -24,6 +24,7 @@ contract FamilyWallet is Ownable{
 
     mapping(address => uint) public allowance;
 
+
     modifier ownerOrAllowed(uint _amount) {
         require(isOwner() || allowance[msg.sender] >= _amount, "You are not allowed!");
         _;
@@ -43,6 +44,10 @@ contract FamilyWallet is Ownable{
         allowance[_who] = _amount;
     }
 
+    function getAllowance() public view returns (uint) {
+        return allowance[msg.sender];
+    }   
+
     function addToBlockchain(address payable receiver, uint amount, string memory message, string memory keyword) public {
         transactionCount += 1;
         transactions.push(TransferStruct(msg.sender, receiver, amount, message, block.timestamp, keyword));
@@ -56,7 +61,8 @@ contract FamilyWallet is Ownable{
 
     function getTransactionCount() public view returns (uint256) {
         return transactionCount;
-    }    
+    }
+
 
     function withdrawMoney(address payable _to, uint _amount) public ownerOrAllowed(_amount) {
         require(_amount <= address(this).balance, "Insufficient funds!");
