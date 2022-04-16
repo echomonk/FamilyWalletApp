@@ -10,12 +10,14 @@ export default function TransactionProvider({ children }) {
   const { contract, web3 } = UseWeb3()
   const { account } = UseAccount()
   const [transactions, setTransactions] = useState([])
+  const [ allowance, setAllowance ] = useState()
+  console.log(allowance)
   const [formData, setformData] = useState({ addressTo: "", amount: "", keyword: "", message: "" })
-  const [tcount, setTcount] = useState("")
-  console.log(tcount)
-
-
-
+ 
+  const handleChange = (e, name) => {
+    setformData((prevState) => ({ ...prevState, [name]: e.target.value }))
+  }
+ 
   const addAllowance = async() => {
     if (web3) {
       const { addressTo, amount } = formData
@@ -23,10 +25,11 @@ export default function TransactionProvider({ children }) {
       const data = {from: account.data, to: addressTo, gas: "0x5208", value: parsedAmount}
       data = JSON.parse(JSON.stringify(data))
         try {
-          await contract.methods.addAllowance(
+          const all = await contract.methods.addAllowance(
             addressTo,
             parsedAmount
           ).send({from: account.data})
+          console.log(all)
         } catch (error) {
           console.log(error)
         }
@@ -50,8 +53,7 @@ export default function TransactionProvider({ children }) {
     }
   }
 
-
-  const withdraw= async () => {
+  const withdraw = async () => {
     if (web3) {
       const { addressTo, amount } = formData
       const parsedAmount = web3.utils.toWei(amount, "ether")
@@ -86,9 +88,7 @@ export default function TransactionProvider({ children }) {
             keyword,
             message
             ).send({from: account.data})
-            await contract.methods.getTransactionCount().call()
-            this.setTcount({ t_count: this.state.t_count + 1 })
-            // window.location.reload()
+            window.location.reload()
           } catch (err) {
             console.log(err)
           }
@@ -113,13 +113,24 @@ export default function TransactionProvider({ children }) {
         }
       }
     }
-    
-  const handleChange = (e, name) => {
-    setformData((prevState) => ({ ...prevState, [name]: e.target.value }))
-  };
+
+    const getAllowance = async (web3) => {
+      if (web3) {
+        try {
+          const allowance = await contract.methods.getAllowance().call({from: account.data})
+          const parsedAllowance = web3.utils.fromWei(allowance, "ether")
+          console.log(parsedAllowance)
+          setAllowance(parsedAllowance)
+        } catch (error) {
+          console.log("No Allowance")
+        }
+      }
+    }
+  
   useEffect(() => {
       getAllTransactions(web3)
-  }, [account.data, tcount])
+      getAllowance(web3)
+  }, [account.data, allowance])
 
   return (
       
@@ -130,7 +141,8 @@ export default function TransactionProvider({ children }) {
           sendTx,
           reduceAllowance,
           addAllowance,
-          withdraw
+          withdraw,
+          allowance
         }}>
           {children}
       </TransactionContext.Provider>
@@ -141,13 +153,6 @@ export default function TransactionProvider({ children }) {
 export function UseTxContext() {
     return useContext(TransactionContext)
 }
-
-
-
-
-
-
-
 
 
 
