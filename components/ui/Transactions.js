@@ -1,6 +1,6 @@
 import useFetch from "@components/provider/web3/hooks/useFetch";
 import { shortenAddress } from "@components/provider/web3/hooks/shortenAddress";
-import { UseAccount, useTransaction } from "@components/web3/hooks";
+import { UseAccount } from "@components/web3/hooks";
 import { UseTxContext } from "@components/context/TransactionContext";
 
 
@@ -48,8 +48,6 @@ const TransactionsCard = ({ addressTo, addressFrom, timestamp, message, keyword,
 const Transactions = () => {
 const { transactions } = UseTxContext()
 const { account } = UseAccount()
-// const { transaction } = useTransaction()
-// console.log(transaction)
 
     return (
       <div className="flex w-full justify-center items-center 2xl:px-20 gradient-bg-transactions">
