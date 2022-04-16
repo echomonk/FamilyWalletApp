@@ -1,10 +1,11 @@
+import { UseTxContext } from "@components/context/TransactionContext";
 import { UseAccount, useNetwork } from "@components/web3/hooks";
 import Tabs from "./tabs";
 
 const Dashboard = ({}) => {
   const { account } = UseAccount()
   const { network } = useNetwork()
-
+  const { allowance } = UseTxContext()
 
     return (
       <div className="flex flex-col w-full justify-center items-center my-5 p-3 blue-glassmorphism">
@@ -30,7 +31,7 @@ const Dashboard = ({}) => {
 
           </span>
               <div className="my-0.5 w-full rounded-full p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism">
-                Allowance:
+                Allowance: { allowance } ETH
               </div>
               <Tabs />
       </div>
@@ -39,5 +40,3 @@ const Dashboard = ({}) => {
   }
   
   export default Dashboard;
-
- // p-5 sm:w-96 w-full flex flex-col justify-start items-center blue-glassmorphism
