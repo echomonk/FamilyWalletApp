@@ -28,11 +28,10 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
 
 export default function Welcome() {
   const { connect, isLoading, isWeb3Loaded, web3 } = UseWeb3()
-  const { handleChange, formData, sendTx } = UseTxContext()
+  const { formData, handleChange, sendTx } = UseTxContext()
   const { account } = UseAccount()
   const { network } = useNetwork()
   const { eth } = useEthPrice()
-  // const { transaction } = useTransaction()
 
   const handleSubmit = (e) => {
     const { addressTo, amount, keyword, message } = formData
@@ -53,11 +52,10 @@ export default function Welcome() {
               <h1 className="text-3xl text-center sm:text-5xl text-white text-gradient py-1">
                 A family wallet app <br /> with independent transfer functionality.
               </h1>
-              {/* {transaction.data} */}
               <p className="text-center mt-5 text-white font-light md:w-9/12 w-11/12 text-base">
                 0x73784995de4aabF7F4AB74E7DCAEf30fFe76Bbd9
                 
-                Explore the crypto world. Buy and sell cryptocurrencies easily.
+                Please contact admin to be added on the wallet.
               </p>
             </div>
               
@@ -160,25 +158,6 @@ export default function Welcome() {
                   </button>
                 )}
             </div>
-
-            {/* <div className="grid sm:grid-cols-3 grid-cols-2 w-full mt-10">
-                <div className={`rounded-tl-2xl ${companyCommonStyles}`}>
-                  Reliability
-                </div>
-                <div className={companyCommonStyles}>Security</div>
-                <div className={`sm:rounded-tr-2xl ${companyCommonStyles}`}>
-                  Ethereum
-                </div>
-                <div className={`sm:rounded-bl-2xl ${companyCommonStyles}`}>
-                  Web 3.0
-                </div>
-                <div className={companyCommonStyles}>Low Fees</div>
-                <div className={`rounded-br-2xl ${companyCommonStyles}`}>
-                  Blockchain
-                </div>
-              </div> */}
-           
-
           </div>
         </div>
       </div>  
