@@ -15,8 +15,7 @@ export default function Tabs () {
     return (
         <div className="p-5 sm:w-96 w-full flex flex-col justify-start items-center bg-transparent" >
            <Tab className="p-5 sm:w-96 w-full flex flex-col justify-start items-center bg-transparent">
-            <TabList color="">
-
+            <TabList className="flex items-center justify-center gap-1 rounded-lg text-sm font-medium py-4 px-6 leading-normal text-white transition-all duration-300 ">
                 <TabItem
                     onClick={(e) => {
                         e.preventDefault();
@@ -39,7 +38,6 @@ export default function Tabs () {
                 >
                     Add Allowance
                 </TabItem>
-
             </TabList>
                 <TabContent>
                     <TabPane
