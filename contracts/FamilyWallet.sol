@@ -40,8 +40,8 @@ contract FamilyWallet is Ownable{
     }
 
     function addAllowance(address _who, uint _amount) public onlyOwner {
-        emit AllowanceChanged(_who, msg.sender, allowance[_who], _amount);
         allowance[_who] = _amount;
+        emit AllowanceChanged(_who, msg.sender, allowance[_who], _amount);
     }
 
     function getAllowance() public view returns (uint) {
