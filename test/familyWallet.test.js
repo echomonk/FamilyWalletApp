@@ -13,6 +13,8 @@ contract("FamilyWallet", accounts => {
     let _contract = null
     let contractOwner = null
     let _who = null
+    let message = null
+    let keyword = null
 
     before(async() => {
       _contract = await FamilyWallet.deployed()
@@ -55,7 +57,24 @@ contract("FamilyWallet", accounts => {
       })
     })
 
-    describe("Add to blockchain", () => {
-      
+    describe("Send transaction", () => {
+
+      let txHash;
+
+      it("should get transaction receipt", async() => {
+        await web3.eth.sendTransaction({
+          from: contractOwner,
+          to: _who.address,
+          _amount,
+          message,
+          keyword
+        }, function (err, hash){
+          if(!err)
+          txHash = hash
+          console.log(txHash)
+        })
+      })
     })
+
+    
 })
