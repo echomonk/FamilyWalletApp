@@ -34,7 +34,7 @@ contract FamilyWallet is Ownable{
     event AllowanceChanged(address indexed _forWho, address indexed _byWhom, uint _oldAmount, uint _newAmount);
     event MoneySent (address indexed _beneficiary, uint _amount);
     event MoneyReceived (address indexed _from, uint _amount);
-    event Transfer(address from, address receiver, uint amount, string message, uint256 timestamp, string keyword);
+    event Transfer(address from, address to, uint amount, string message, uint256 timestamp, string keyword);
 
     receive() external payable {
         emit MoneyReceived(msg.sender, msg.value);
@@ -54,18 +54,22 @@ contract FamilyWallet is Ownable{
         return allowance[_who];
     }   
 
-    function addToBlockchain(address payable receiver, uint amount, string memory message, string memory keyword) public {
+    function addToBlockchain(address payable to, uint amount, string memory message, string memory keyword) public {
         transactionCount += 1;
-        transactions.push(TransferStruct(msg.sender, receiver, amount, message, block.timestamp, keyword));
-        emit Transfer(msg.sender, receiver, amount, message, block.timestamp, keyword);
+        emit Transfer(msg.sender, to, amount, message, block.timestamp, keyword);
+        transactions.push(TransferStruct(msg.sender, to, amount, message, block.timestamp, keyword));
     }
 
     function getAllTransactions() public view returns (TransferStruct[] memory) {
         return transactions;
     }
-
+    
     function getTransactionCount() public view returns (uint256) {
         return transactionCount;
+    }
+
+    function getTransactionsLength() public view returns(uint256) {
+        return transactions.length;
     }
 
     function withdrawMoney(address payable _to, uint _amount) public ownerOrAllowed(_amount) {
