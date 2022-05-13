@@ -1,4 +1,4 @@
-A wallet dApp with individual transfer ETH option. You can attach automated gifs from giphy based on the keyword to your transfers along with your custom message and add it to the blockchain.
+A wallet dApp with individual transfer ETH option. You can attach gifs automatically fetched from giphy based on the keyword to the transfers along with your custom message and add it to the blockchain.
 
 *(In progress...)*
 
