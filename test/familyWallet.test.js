@@ -6,24 +6,34 @@ const { catchRevert } = require("./utils/exceptions")
 
 const toBN = _amount => web3.utils.toBN(_amount)
 
+const getGas = async result => {
+  const tx = await web3.eth.getTransaction(result.tx)
+  const gasUsed = toBN(result.receipt.gasUsed)
+  const gasPrice = toBN(tx.gasPrice)
+  const gas = gasUsed.mul(gasPrice)
+  return gas
+}
+
 
 contract("FamilyWallet", accounts => {
 
-    const _amount = "1000000000000000000"
-    const _amount2 = "2000000000000000000"
-
+    const _amount = "100000000000000000"
+    const _amount2 = "200000000000000000"
+    
     let _contract = null
     let contractOwner = null
     let _who = null
+    let unauthorized = null
     let message = null
     let keyword = null
     // let timestamp = null
     
- 
+    
     before(async() => {
       _contract = await FamilyWallet.deployed()
       contractOwner = accounts[0]
       _who = accounts[1]
+      unauthorized = accounts[2]
       message = "hello"
       keyword = "hello"
       // timestamp = block.timestamp
@@ -31,14 +41,14 @@ contract("FamilyWallet", accounts => {
 
     describe("Adding Allowance", () => {
 
-      it("should not be changed by NOT the owner", async() => {
+      it("should NOT be changed by NOT the owner", async() => {
         await catchRevert(_contract.addAllowance(_who, _amount, {from: _who}))
       })
       
       it("should add allowance to beneficiary", async () =>{
-        const beforeAddAllowance = await _contract.getAllowance(_who, {from: _who.address})
-        await _contract.addAllowance(_who, _amount, {to: _who.address, _amount})
-        const afterAddAllowance = await _contract.getAllowance(_who, {from: _who.address})
+        const beforeAddAllowance = await _contract.getAllowance(_who, {from: contractOwner})
+        await _contract.addAllowance(_who, _amount, {from: contractOwner})
+        const afterAddAllowance = await _contract.getAllowance(_who, {from: contractOwner})
         
         assert.equal( 
             toBN(beforeAddAllowance).add(toBN(_amount)).toString(),
@@ -49,14 +59,14 @@ contract("FamilyWallet", accounts => {
 
     describe("Reduce Allowance", () => { 
 
-      it("should not be changed by NOT the owner", async() => {
+      it("should NOT be changed by NOT the owner", async() => {
         await catchRevert(_contract.reduceAllowance(_who, _amount, {from: _who}))
       })
 
       it("should reduce allowance", async () => {
-        const beforeReduceAllowance = await _contract.getAllowance(_who, {from: _who.address})
-        await _contract.reduceAllowance(_who, _amount, { to: _who.address, _amount })
-        const afterReduceAllowance = await _contract.getAllowance(_who, {from: _who.address})
+        const beforeReduceAllowance = await _contract.getAllowance(_who, {from: contractOwner})
+        await _contract.reduceAllowance(_who, _amount, {from: contractOwner})
+        const afterReduceAllowance = await _contract.getAllowance(_who, {from: contractOwner})
 
         assert.equal( 
           toBN(beforeReduceAllowance).sub(toBN(_amount)).toString(),
@@ -122,6 +132,7 @@ contract("FamilyWallet", accounts => {
 
       let txHash;
       let contractBal;
+      let userAllowance;
 
       before(async () => {
         await web3.eth.sendTransaction({
@@ -129,32 +140,29 @@ contract("FamilyWallet", accounts => {
           to: _contract.address,
           value: _amount,
         })
-        const userAllowance = await _contract.addAllowance(_who, _amount, {to: _who.address, _amount})
-        const contractBal = await web3.eth.getBalance(_contract.address)
-        // console.log(contractBal)
+        const userAllowance = await _contract.addAllowance(_who, _amount, {from: contractOwner})
       })
-
+      
       it("should allow withdraw money for allowed user", async () => {
-       const balanceBefore = await web3.eth.getBalance(_who) 
-       const withdrawMoney = await _contract.withdrawMoney(_who, _amount, {to: _who.address, _amount})
-       const balanceAfter = await web3.eth.getBalance(_who)
+       const balanceBefore = await web3.eth.getBalance(contractOwner)
+       const result = await _contract.withdrawMoney(contractOwner, _amount, {from: contractOwner})
+       const balanceAfter = await web3.eth.getBalance(contractOwner)
+       const gas = await getGas(result)
 
        assert.equal(
-         toBN(balanceAfter).sub(toBN(_amount)).toString(), 
+         toBN(balanceAfter).sub(toBN(_amount)).add(toBN(gas)).toString(), 
          toBN(balanceBefore).toString(),
          "Cannot withdraw from contract ")
       })
 
       it("should NOT allow to withdraw more than allowance", async () => {
-        // const balanceBefore = await web3.eth.getBalance(_who) 
-        // const balanceAfter = await web3.eth.getBalance(_who)
-        await catchRevert(_contract.withdrawMoney(_who, _amount2, {to: _who.address, _amount2}))
- 
-        // assert.equal(
-        //   toBN(balanceAfter).sub(toBN(_amount2)).toString(), 
-        //   toBN(balanceBefore).toString(),
-        //   "User can withdraw more than allowed amount!")
+        await catchRevert(_contract.withdrawMoney(contractOwner, _amount2, {from: contractOwner}))    
       })
+
+      it("should NOT allow withdrawals by NOT authorized address", async () => {
+        await catchRevert(_contract.withdrawMoney(unauthorized, _amount, {from: unauthorized}))
+      })
+
     })
 
 
