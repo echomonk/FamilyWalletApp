@@ -145,8 +145,16 @@ contract("FamilyWallet", accounts => {
          "Cannot withdraw from contract ")
       })
 
-
-
+      it("should NOT allow to withdraw more than allowance", async () => {
+        // const balanceBefore = await web3.eth.getBalance(_who) 
+        // const balanceAfter = await web3.eth.getBalance(_who)
+        await catchRevert(_contract.withdrawMoney(_who, _amount2, {to: _who.address, _amount2}))
+ 
+        // assert.equal(
+        //   toBN(balanceAfter).sub(toBN(_amount2)).toString(), 
+        //   toBN(balanceBefore).toString(),
+        //   "User can withdraw more than allowed amount!")
+      })
     })
 
 
