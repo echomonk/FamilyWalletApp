@@ -77,8 +77,8 @@ contract FamilyWallet is Ownable{
         if(!isOwner()) {
             reduceAllowance(msg.sender, _amount);
         }
-        _to.transfer(_amount);
         emit MoneySent(_to, _amount);
+        _to.transfer(_amount);
     }
 
     function renounceOwnership() public view override onlyOwner {
