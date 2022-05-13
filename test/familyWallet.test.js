@@ -1,7 +1,7 @@
 
 
 const FamilyWallet = artifacts.require("FamilyWallet")
-const truffleAssert = require("truffle-assertions");
+const truffleAssert = require("truffle-assertions")
 const { catchRevert } = require("./utils/exceptions")
 
 const toBN = _amount => web3.utils.toBN(_amount)
@@ -9,7 +9,8 @@ const toBN = _amount => web3.utils.toBN(_amount)
 
 contract("FamilyWallet", accounts => {
 
-    const _amount = "2000000000000000000";
+    const _amount = "1000000000000000000"
+    const _amount2 = "2000000000000000000"
 
     let _contract = null
     let contractOwner = null
@@ -17,6 +18,7 @@ contract("FamilyWallet", accounts => {
     let message = null
     let keyword = null
     // let timestamp = null
+    
  
     before(async() => {
       _contract = await FamilyWallet.deployed()
@@ -44,6 +46,7 @@ contract("FamilyWallet", accounts => {
             "Beneficiary balance is not correct!")
       })
     })
+
     describe("Reduce Allowance", () => { 
 
       it("should not be changed by NOT the owner", async() => {
@@ -110,9 +113,42 @@ contract("FamilyWallet", accounts => {
 
       it("should get all transactions", async () => {
         const txs = await _contract.getAllTransactions.call()
-        console.log(txs)
+        // console.log(txs)
       })
+
     })
+
+    describe("Withdraw Money", () => {
+
+      let txHash;
+      let contractBal;
+
+      before(async () => {
+        await web3.eth.sendTransaction({
+          from: contractOwner,
+          to: _contract.address,
+          value: _amount,
+        })
+        const userAllowance = await _contract.addAllowance(_who, _amount, {to: _who.address, _amount})
+        const contractBal = await web3.eth.getBalance(_contract.address)
+        // console.log(contractBal)
+      })
+
+      it("should allow withdraw money for allowed user", async () => {
+       const balanceBefore = await web3.eth.getBalance(_who) 
+       const withdrawMoney = await _contract.withdrawMoney(_who, _amount, {to: _who.address, _amount})
+       const balanceAfter = await web3.eth.getBalance(_who)
+
+       assert.equal(
+         toBN(balanceAfter).sub(toBN(_amount)).toString(), 
+         toBN(balanceBefore).toString(),
+         "Cannot withdraw from contract ")
+      })
+
+
+
+    })
+
 
     
   })
