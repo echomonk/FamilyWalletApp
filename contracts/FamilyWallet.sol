@@ -5,12 +5,13 @@ pragma solidity >= 0.7.0 < 0.9.0;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
-contract FamilyWallet is Ownable{
+contract FamilyWallet is Ownable {
 
     using SafeMath for uint;
 
     uint public numOfBeneficiaries;
     uint256 transactionCount;
+    bool public isStopped = false;
 
     struct TransferStruct {
         address sender;
@@ -25,9 +26,18 @@ contract FamilyWallet is Ownable{
 
     mapping(address => uint) public allowance;
 
-
     modifier ownerOrAllowed(uint _amount) {
         require(isOwner() || allowance[msg.sender] >= _amount, "You are not allowed!");
+        _;
+    }
+
+    modifier onlyWhenNotStopped {
+        require(!isStopped);
+        _;
+    }
+
+    modifier onlyWhenStopped {
+        require(isStopped);
         _;
     }
 
@@ -38,6 +48,23 @@ contract FamilyWallet is Ownable{
 
     receive() external payable {
         emit MoneyReceived(msg.sender, msg.value);
+    }
+
+    function emergencyWithdraw() external onlyWhenStopped onlyOwner {
+        (bool success, ) = owner().call{value: address(this).balance}("");
+        require(success, "Transfer failed.");
+    }
+
+    function destroy() external onlyWhenStopped onlyOwner {
+        selfdestruct(payable(address(this)));
+    }
+
+    function stopContract() external onlyOwner {
+        isStopped = true;
+    }
+
+    function resumeContract() external onlyOwner {
+        isStopped = false;
     }
 
     function addAllowance(address _who, uint _amount) public onlyOwner {
@@ -88,4 +115,5 @@ contract FamilyWallet is Ownable{
     function isOwner() internal view returns(bool) {
         return owner() == msg.sender;
     }
+
 }
