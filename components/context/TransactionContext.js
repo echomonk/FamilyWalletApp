@@ -22,7 +22,7 @@ export default function TransactionProvider({ children }) {
     if (web3) {
       const { addressTo, amount } = formData
       const parsedAmount = web3.utils.toWei(amount, "ether")
-      const data = {from: account.data, to: addressTo, gas: "0x5208", value: parsedAmount}
+      const data = {from: account.data, to: addressTo, gas: "0x7530", value: parsedAmount}
       data = JSON.parse(JSON.stringify(data))
         try {
           const all = await contract.methods.addAllowance(
@@ -40,7 +40,7 @@ export default function TransactionProvider({ children }) {
     if (web3) {
       const { addressTo, amount } = formData
       const parsedAmount = web3.utils.toWei(amount, "ether")
-      const data = {from: account.data, to: addressTo, gas: "0x5208", value: parsedAmount}
+      const data = {from: account.data, to: addressTo, gas: "0x7530", value: parsedAmount}
       data = JSON.parse(JSON.stringify(data))
         try {
           await contract.methods.reduceAllowance(
@@ -57,7 +57,7 @@ export default function TransactionProvider({ children }) {
     if (web3) {
       const { addressTo, amount } = formData
       const parsedAmount = web3.utils.toWei(amount, "ether")
-      const data = {from: account.data, to: addressTo, gas: "0x5208", value: parsedAmount}
+      const data = {to: addressTo, value: parsedAmount}
       data = JSON.parse(JSON.stringify(data))
       try {
         await contract.methods.withdrawMoney(
@@ -74,7 +74,7 @@ export default function TransactionProvider({ children }) {
     if (web3) {
       const { addressTo, amount, keyword, message } = formData
       const parsedAmount = web3.utils.toWei(amount, "ether")
-      const data = {from: account.data, to: addressTo, gas: "0x5208", value: parsedAmount}
+      const data = {from: account.data, to: addressTo, gas: "0x7530", value: parsedAmount}
       data = JSON.parse(JSON.stringify(data))
         try {
           await web3.eth.sendTransaction((data), function(err, transactionHash) {
@@ -130,7 +130,7 @@ export default function TransactionProvider({ children }) {
   useEffect(() => {
       getAllTransactions(web3)
       getAllowance(web3)
-  }, [account.data, allowance])
+  }, [account.data])
 
   return (
       
