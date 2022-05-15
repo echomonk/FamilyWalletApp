@@ -2,12 +2,12 @@ import { useEffect } from "react"
 import useSWR from "swr"
 
 const beneficiaryAddress = {
-  "0x2c2ebffc2b6f8fe74a3b84ce6f97671eb643cabda591649f6661bcf5670deaff": true,
+  "0x78eef18bd85a1a52b35693576303f610b00e090c0d98152642b9040fc0609359": true,
   "0xe92dbd7b3bf75f577854c0133f320110a610358b71787ad59733064b10d33bdb": true
 }
 
-const adminAddresses = {
- "0x79a4bf16935602e50c7ec1f30f5b133e9749bc7c4cc735c0ba842e042956503b": true
+const adminAddress = {
+ "0x763c3c50bbc55e58e438858934e3b67c0db6aac912bbab03bd94e6959e38fa96": true
 }
 
 export const handler = (web3, provider) => () => {
@@ -34,8 +34,8 @@ export const handler = (web3, provider) => () => {
       beneficiaryAddress[web3.utils.keccak256(data)]) ?? false,
     isAdmin: (
       data && 
-      adminAddresses[web3.utils.keccak256(data)]) ?? false,
+      adminAddress[web3.utils.keccak256(data)]) ?? false,
     mutate,
-      ...rest
+    ...rest
   }
 }
