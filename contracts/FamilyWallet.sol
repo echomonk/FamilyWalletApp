@@ -9,7 +9,6 @@ contract FamilyWallet is Ownable {
 
     using SafeMath for uint;
 
-    uint public numOfBeneficiaries;
     uint256 transactionCount;
     bool public isStopped = false;
 
@@ -50,6 +49,10 @@ contract FamilyWallet is Ownable {
         emit MoneyReceived(msg.sender, msg.value);
     }
 
+    function isOwner() internal view returns(bool) {
+        return owner() == msg.sender;
+    }
+
     function emergencyWithdraw() external onlyWhenStopped onlyOwner {
         (bool success, ) = owner().call{value: address(this).balance}("");
         require(success, "Transfer failed.");
@@ -72,13 +75,13 @@ contract FamilyWallet is Ownable {
         emit AllowanceChanged(_who, msg.sender, allowance[_who], _amount);
     }
 
-    function reduceAllowance(address _who, uint _amount) public onlyOwner {
+    function reduceAllowance(address _who, uint _amount) public ownerOrAllowed(_amount) {
         emit AllowanceChanged(_who, msg.sender, allowance[_who], allowance[_who].sub(_amount));
         allowance[_who] =  allowance[_who].sub(_amount);
     }
 
-    function getAllowance(address _who) public view returns (uint) {
-        return allowance[_who];
+    function getAllowance() public view returns (uint) {
+        return allowance[msg.sender];
     }   
 
     function addToBlockchain(address payable to, uint amount, string memory message, string memory keyword) public {
@@ -110,10 +113,6 @@ contract FamilyWallet is Ownable {
 
     function renounceOwnership() public view override onlyOwner {
         revert("Cannot renounce ownership!");
-    }
-
-    function isOwner() internal view returns(bool) {
-        return owner() == msg.sender;
     }
 
 }
