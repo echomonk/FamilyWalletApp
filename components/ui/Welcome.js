@@ -53,8 +53,8 @@ export default function Welcome() {
                 A family wallet app <br /> with independent transfer functionality.
               </h1>
               <p className="text-center mt-5 text-white font-light md:w-9/12 w-11/12 text-base">
-                {/* 0x73784995de4aabF7F4AB74E7DCAEf30fFe76Bbd9 */}
-                
+                {"0xBB7959390ebF45Dbd04cDfebDdfa5920ca7293a6"} <br />
+
                 Please contact admin to be added on the wallet.
               </p>
             </div>
