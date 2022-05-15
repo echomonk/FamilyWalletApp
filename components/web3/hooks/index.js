@@ -21,19 +21,3 @@ export const UseAccount = () => {
         account: swrRes
     }
 }
-
-// export const useForm = () => {
-//   const swrRes = enhanceHook(useHooks(hooks => hooks.useForm)())
-
-//   return {
-//     formData: swrRes
-//   }
-// }
-
-// export const useTransaction = () => {
-//   const swrRes = enhanceHook(useHooks(hooks => hooks.useTransaction)())
-
-//   return {
-//     transaction: swrRes
-//   }
-// }
