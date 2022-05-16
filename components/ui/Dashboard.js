@@ -8,7 +8,8 @@ const Dashboard = ({}) => {
   const { allowance } = UseTxContext()
 
     return (
-      <div className="flex flex-col w-full justify-center items-center my-5 p-3 blue-glassmorphism">
+      <div className=" flex flex-1 flex-col items-center justify-start w-full mf:mt-0 mt-10">
+        <div className="p-5 sm:w-96 w-full flex flex-col justify-start items-center blue-glassmorphism">
           <span className="flex flex-col w-full justify-center items-center my-5 p-1 text-base font-semibold white-glassmorphism">
           { account.isAdmin ?
             <span
@@ -34,8 +35,8 @@ const Dashboard = ({}) => {
                 Allowance: { allowance } ETH
               </div>
               <Tabs />
+        </div>
       </div>
-      
     );
   }
   
