@@ -5,7 +5,7 @@ import TabItem from "@material-tailwind/react/TabItem";
 import TabContent from "@material-tailwind/react/TabContent";
 import TabPane from "@material-tailwind/react/TabPane";
 import { useState } from "react";
-import { addAllowance, withdraw } from "@components/common/walletpanel";
+import { addAllowance, reduceAllowance, withdraw } from "@components/common/walletpanel";
 import { UseAccount } from "@components/web3/hooks";
 
 
@@ -38,6 +38,17 @@ export default function Tabs () {
                 >
                     Add Allowance
                 </TabItem>
+                <TabItem 
+                    onClick={(e) => {
+                        e.preventDefault();
+                        setOpenTab(3);
+                    }}
+                    ripple="light"
+                    active={openTab === 3 ? true : false}
+                    href="tabItem"
+                >
+                    Reduce Allowance
+                </TabItem>
             </TabList>
                 <TabContent>
                     <TabPane
@@ -49,6 +60,10 @@ export default function Tabs () {
                     <TabPane 
                     active={openTab === 2 ? true : false}>
                         {addAllowance()}
+                    </TabPane>
+                    <TabPane 
+                    active={openTab === 3 ? true : false}>
+                        {reduceAllowance()}
                     </TabPane>
                 </TabContent>
             </Tab>
