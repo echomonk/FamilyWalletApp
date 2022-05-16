@@ -11,7 +11,7 @@ export default function TransactionProvider({ children }) {
   const { account } = UseAccount()
   const [transactions, setTransactions] = useState([])
   const [ allowance, setAllowance ] = useState()
-  console.log(allowance)
+  // console.log(allowance)
   const [formData, setformData] = useState({ addressTo: "", amount: "", keyword: "", message: "" })
  
   const handleChange = (e, name) => {
@@ -25,11 +25,10 @@ export default function TransactionProvider({ children }) {
       const data = {from: account.data, to: addressTo, gas: "0x7530", value: parsedAmount}
       data = JSON.parse(JSON.stringify(data))
         try {
-          const all = await contract.methods.addAllowance(
+          await contract.methods.addAllowance(
             addressTo,
             parsedAmount
           ).send({from: account.data})
-          console.log(all)
         } catch (error) {
           console.log(error)
         }
@@ -130,7 +129,7 @@ export default function TransactionProvider({ children }) {
   useEffect(() => {
       getAllTransactions(web3)
       getAllowance(web3)
-  }, [account.data])
+  }, [account.data], allowance)
 
   return (
       
