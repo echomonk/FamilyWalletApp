@@ -16,19 +16,18 @@ const Dashboard = ({}) => {
               className="flex flex-grow w-full justify-center items-center my-0.5 p-2 rounded-full bg-orange-400 hover:bg-orange-500 text-white text-base font-semibold">
               Welcome Admin
             </span> :
-            <>
-            </>
+            <></>
           } 
           { network.hasInitialResponse && !network.isSupported &&
              <div className="my-0.5 w-full rounded-full p-2 outline-none bg-transparent text-red-500 border-none text-sm white-glassmorphism">
                Wrong network! Connect to:  {network.target}
                </div>
            }
-            { network.data &&
-             <div className="my-0.5 w-full rounded-full p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism">
-                Currently on: {network.data}
-               </div>
-           }
+          { network.data &&
+            <div className="my-0.5 w-full rounded-full p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism">
+              Currently on: {network.data}
+              </div>
+          }
 
           </span>
               <div className="my-0.5 w-full rounded-full p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism">
